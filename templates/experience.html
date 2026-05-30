@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}Experience — {{ personal.name }}{% endblock %}
+
+{% block content %}
+
+<section class="page-hero experience-hero">
+  <div class="container">
+    <span class="page-hero-tag reveal">Work History</span>
+    <h1 class="page-hero-title reveal" style="transition-delay:0.1s">
+      Professional<br><em>Experience</em>
+    </h1>
+    <p class="page-hero-sub reveal" style="transition-delay:0.2s">
+      From app analytics and executive dashboards to automation at scale — every role sharpened how I turn data into decisions.
+    </p>
+  </div>
+</section>
+
+<section class="section experience-timeline-section">
+  <div class="container">
+    <div class="reveal experience-section-intro">
+      <div class="section-tag">Timeline</div>
+      <h2 class="section-title">Roles &amp; <em>impact</em></h2>
+      <!-- <p class="experience-section-lead">Use the website and LinkedIn icons next to each company to learn more.</p> -->
+    </div>
+    <div class="timeline">
+      {% for job in experience %}
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-meta">
+          <span class="timeline-period">{{ job.period }}</span>
+          {% if 'Present' in job.period %}
+          <span class="timeline-pill-active">Current</span>
+          {% endif %}
+          <span class="timeline-type">{{ job.type }}</span>
+          <span class="timeline-type">{{ job.location }}</span>
+        </div>
+        <div class="timeline-role">{{ job.title }}</div>
+        <div class="timeline-company-line">
+          <span class="timeline-company-title">
+            {% if job.get('company_website') %}
+            <a href="{{ job.company_website }}" class="timeline-company-name-text timeline-company-name-link" target="_blank" rel="noopener noreferrer">{{ job.company }}</a>
+            {% else %}
+            <span class="timeline-company-name-text">{{ job.company }}</span>
+            {% endif %}
+          </span>
+          <span class="timeline-company-icons" role="group" aria-label="External links for {{ job.company }}">
+            {% if job.get('company_website') %}
+            <a href="{{ job.company_website }}" class="timeline-icon-link timeline-icon-link-web" target="_blank" rel="noopener noreferrer" title="Company website" aria-label="{{ job.company }} — website">
+              <svg class="timeline-link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </a>
+            {% endif %}
+            {% if job.get('linkedin_url') %}
+            <a href="{{ job.linkedin_url }}" class="timeline-icon-link timeline-icon-link-in" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="{{ job.company }} — LinkedIn">
+              <svg class="timeline-link-icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </a>
+            {% endif %}
+          </span>
+        </div>
+        <div class="timeline-tools">
+          {% for tool in job.tools %}
+          <span class="timeline-tool">{{ tool }}</span>
+          {% endfor %}
+        </div>
+        <ul class="timeline-list">
+          {% for r in job.responsibilities %}
+          <li>{{ r }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt experience-cta-section" style="text-align:center;padding:3rem 0">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title" style="font-size:clamp(1.8rem,4vw,2.8rem);margin-bottom:0.8rem">
+        Interested in working <em>together?</em>
+      </h2>
+      <p style="max-width:400px;margin:0 auto 1.8rem;font-size:0.95rem">
+        Download my resume for the full picture, or reach out directly.
+      </p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="{{ personal.resume }}" class="btn-primary" target="_blank">Download Resume ↗</a>
+        <a href="{{ url_for('contact') }}" class="btn-outline">Contact Me</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

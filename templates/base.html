@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script>
+(function(){try{var k='portfolio-theme';if(localStorage.getItem(k)==='light')document.documentElement.setAttribute('data-theme','light');else document.documentElement.removeAttribute('data-theme');}catch(e){}})();
+</script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ personal.name }} — {{ personal.title }}{% endblock %}</title>
+<meta name="description" content="{{ personal.tagline }}">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<a href="#main-content" class="skip-link sr-only-focusable">Skip to main content</a>
+
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+<!-- NAV -->
+<header>
+<nav id="navbar" aria-label="Primary">
+  <a href="{{ url_for('index') }}" class="nav-logo">
+    <span class="nav-logo-am">AM</span><span class="nav-logo-dot">.</span>
+  </a>
+
+<ul class="nav-links" id="navLinks" role="menubar">
+  <li role="none"><a role="menuitem" href="{{ url_for('index') }}" {% if request.endpoint=='index' %}class="active" aria-current="page"{% endif %}>Home</a></li>
+  <li role="none"><a role="menuitem" href="{% if request.endpoint == 'index' %}#about{% else %}{{ url_for('about') }}{% endif %}" {% if request.endpoint=='about' %}class="active" aria-current="page"{% endif %}>About</a></li>
+  <li role="none"><a role="menuitem" href="{% if request.endpoint == 'index' %}#experience{% else %}{{ url_for('experience') }}{% endif %}" {% if request.endpoint=='experience' %}class="active" aria-current="page"{% endif %}>Experience</a></li>
+  <li role="none"><a role="menuitem" href="{% if request.endpoint == 'index' %}#projects{% else %}{{ url_for('projects') }}{% endif %}" {% if request.endpoint=='projects' %}class="active" aria-current="page"{% endif %}>Projects</a></li>
+  <li role="none"><a role="menuitem" href="{% if request.endpoint == 'index' %}#certifications{% else %}{{ url_for('certifications') }}{% endif %}" {% if request.endpoint=='certifications' %}class="active" aria-current="page"{% endif %}>Certifications</a></li>
+  <li role="none"><a role="menuitem" href="{% if request.endpoint == 'index' %}#volunteer{% else %}{{ url_for('volunteer') }}{% endif %}" {% if request.endpoint=='volunteer' %}class="active" aria-current="page"{% endif %}>Volunteer</a></li>
+  <li role="none"><a role="menuitem" href="{% if request.endpoint == 'index' %}#contact{% else %}{{ url_for('contact') }}{% endif %}" {% if request.endpoint=='contact' %}class="active" aria-current="page"{% endif %}>Contact</a></li>
+  <li role="none"><a role="menuitem" href="{{ personal.resume }}" class="nav-cta" target="_blank" rel="noopener noreferrer">Resume ↗</a></li>
+</ul>
+
+  <div class="nav-tools">
+    <button type="button" class="theme-toggle" id="themeToggle" aria-label="Switch to light mode" title="Toggle color theme">
+      <span class="theme-icon theme-icon-dark" aria-hidden="true">◐</span>
+      <span class="theme-icon theme-icon-light" aria-hidden="true">☀</span>
+    </button>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+</header>
+
+<!-- FLASH MESSAGES -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="flash-container" role="status" aria-live="polite" aria-atomic="true">
+    {% for category, message in messages %}
+    <div class="flash flash-{{ category }}">
+      {{ message }}
+      <button type="button" class="flash-dismiss" aria-label="Dismiss notification">×</button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+<main id="main-content">{% block content %}{% endblock %}</main>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
