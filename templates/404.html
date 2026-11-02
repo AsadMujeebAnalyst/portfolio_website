@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block robots %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block content %}
+<section class="section status-page" aria-labelledby="page-title">
+  <div class="container narrow">
+    <h1 id="page-title" class="page-title">Page not found</h1>
+    <p class="page-sub">That address doesn't match any page on this site. It may have moved, or the link may be mistyped.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('index') }}" class="btn btn-primary">Back to home</a>
+      <a href="{{ url_for('contact') }}" class="btn btn-outline">Contact me</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

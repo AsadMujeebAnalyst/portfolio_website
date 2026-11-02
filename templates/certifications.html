@@ -1,17 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Certifications — {{ personal.name }}{% endblock %}
 
 {% block content %}
-
-<section class="page-hero">
+<section class="page-hero" aria-labelledby="page-title">
   <div class="container">
-    <span class="page-hero-tag reveal">Credentials</span>
-    <h1 class="page-hero-title reveal" style="transition-delay:0.1s">
-      Certifications &<br><em>Achievements</em>
-    </h1>
-    <p class="page-hero-sub reveal" style="transition-delay:0.2s">
-      Verified credentials from Google, freeCodeCamp, DataCamp, and Codecademy — covering BI, ML, Python, and SQL.
-    </p>
+    <h1 id="page-title" class="page-title">Certifications</h1>
+    <p class="page-sub">Verifiable credentials from Google, freeCodeCamp, DataCamp, and Codecademy — covering BI, ML, Python, and SQL.</p>
   </div>
 </section>
 
@@ -19,31 +12,20 @@
   <div class="container">
     <div class="certs-grid">
       {% for cert in certifications %}
-      <div class="cert-card reveal">
-        <div class="cert-badge">
-          <img src="{{ cert.issuer_logo }}" alt="{{ cert.issuer }}" loading="lazy">
+      <article class="cert-card" aria-labelledby="cert-{{ loop.index }}">
+        <p class="cert-issuer">{{ cert.issuer }}</p>
+        <h2 class="cert-title" id="cert-{{ loop.index }}">{{ cert.name }}</h2>
+        <p class="cert-desc">{{ cert.description }}</p>
+        <ul class="chips chips-sm" aria-label="Skills covered">
+          {% for skill in cert.skills %}<li>{{ skill }}</li>{% endfor %}
+        </ul>
+        <div class="cert-footer">
+          <p class="cert-meta">{{ cert.date }}{% if cert.credential_id %} · ID {{ cert.credential_id }}{% endif %}</p>
+          <a href="{{ cert.verify_url }}" class="cert-verify" target="_blank" rel="noopener noreferrer">Verify<span class="sr-only"> {{ cert.name }}, opens in a new tab</span> ↗</a>
         </div>
-        <div class="cert-info">
-          <div class="cert-name">{{ cert.name }}</div>
-          <div class="cert-issuer">{{ cert.issuer }}</div>
-          <p class="cert-desc">{{ cert.description }}</p>
-          <div class="cert-skills">
-            {% for skill in cert.skills %}
-            <span class="cert-skill">{{ skill }}</span>
-            {% endfor %}
-          </div>
-          <div class="cert-footer">
-            <div>
-              <div class="cert-date">{{ cert.date }}</div>
-              <div class="cert-id">ID: {{ cert.credential_id }}</div>
-            </div>
-            <a href="{{ cert.verify_url }}" class="cert-verify" target="_blank">Verify ↗</a>
-          </div>
-        </div>
-      </div>
+      </article>
       {% endfor %}
     </div>
   </div>
 </section>
-
 {% endblock %}

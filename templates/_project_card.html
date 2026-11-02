@@ -1,0 +1,17 @@
+{# Expects `project` in context. Used by the home and projects pages. #}
+<article class="project-card" data-category="{{ project.category }}" aria-labelledby="proj-{{ project.id }}">
+  <p class="project-category">{{ project.category }}</p>
+  <h3 class="project-title" id="proj-{{ project.id }}">{{ project.title }}</h3>
+  <p class="project-subtitle">{{ project.subtitle }}</p>
+  <p class="project-desc">{{ project.description }}</p>
+  <p class="project-impact"><span class="sr-only">Result: </span>{{ project.impact }}</p>
+  <ul class="chips chips-sm" aria-label="Technologies">
+    {% for tech in project.technologies %}<li>{{ tech }}</li>{% endfor %}
+  </ul>
+  {% if project.github or project.demo %}
+  <div class="project-links">
+    {% if project.github %}<a href="{{ project.github }}" target="_blank" rel="noopener noreferrer">Source code<span class="sr-only"> for {{ project.title }} (opens in a new tab)</span> ↗</a>{% endif %}
+    {% if project.demo %}<a href="{{ project.demo }}" target="_blank" rel="noopener noreferrer">Live demo<span class="sr-only"> of {{ project.title }} (opens in a new tab)</span> ↗</a>{% endif %}
+  </div>
+  {% endif %}
+</article>

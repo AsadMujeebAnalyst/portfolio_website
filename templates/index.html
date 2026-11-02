@@ -1,213 +1,72 @@
 {% extends "base.html" %}
-{% block title %}{{ personal.name }} — Data Analyst & BI Specialist{% endblock %}
-{% block extra_css %}<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">{% endblock %}
+{% block head_extra %}
+<link rel="preload" href="{{ static_v(personal.photo) }}" as="image" type="image/webp" fetchpriority="high">
+{% endblock %}
 
 {% block content %}
 
-<!-- ══ HERO ══ -->
-<section id="hero" aria-label="Introduction">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-orb hero-orb-a" aria-hidden="true"></div>
-  <div class="hero-orb hero-orb-b" aria-hidden="true"></div>
-
-  <div class="hero-inner">
-
-    <!-- Left: text -->
+<!-- Hero -->
+<section class="hero" aria-labelledby="hero-name">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="container hero-inner">
     <div class="hero-text">
-      <div class="hero-tag">Data Analyst · Business Intelligence Engineer</div>
-
-      <h1 class="hero-name">
-        <span id="heroNameAsad" class="hero-name-line hero-name-asad"></span><br>
-        <span id="heroNameMujeeb" class="hero-name-line hero-name-mujeeb"></span>
-        <span id="heroNameCursor" class="hero-typing-cursor" aria-hidden="true">|</span>
-      </h1>
-
-      <p id="heroTitle" class="hero-title" data-text="{{ personal.tagline }}">
-        <span id="heroTaglineText" class="hero-tagline-text"></span><span id="heroTaglineCursor" class="hero-typing-cursor" aria-hidden="true">|</span>
-      </p>
-
-      <p class="hero-desc">
-        Data Analyst specializing in Business Intelligence, Machine Learning, and Analytics Engineering — building data systems that drive measurable, real-world outcomes.
-      </p>
+      <p class="hero-role">{{ personal.title }}</p>
+      <h1 id="hero-name" class="hero-name">Asad <span>Mujeeb</span></h1>
+      <p class="hero-tagline">{{ personal.tagline }}</p>
+      <p class="hero-summary">{{ personal.summary }}</p>
 
       <div class="hero-actions">
-        <a href="#projects" class="btn-primary">View My Work</a>
-        <a href="#contact" class="btn-outline">Get In Touch</a>
+        <a href="{{ url_for('projects') }}" class="btn btn-primary">View projects</a>
+        <a href="{{ personal.resume }}" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Download resume<span class="sr-only"> (PDF, opens in a new tab)</span></a>
+        <a href="{{ url_for('contact') }}" class="btn btn-link">Get in touch</a>
       </div>
 
-      <div class="hero-stats">
+      <dl class="hero-stats">
         {% for stat in personal.stats %}
         <div>
-          <div class="hero-stat-number">{{ stat.number }}</div>
-          <div class="hero-stat-label">{{ stat.label }}</div>
+          <dt>{{ stat.label }}</dt>
+          <dd>{{ stat.number }}</dd>
         </div>
         {% endfor %}
-      </div>
+      </dl>
     </div>
 
-    <!-- Right: profile photo -->
     <div class="hero-photo-wrap">
-      <div class="hero-photo-frame">
-        {# ── Drop your photo at static/images/profile.jpg ── #}
-        {% set profile_img = url_for('static', filename='images/profile.jpg') %}
-        <img
-          src="{{ profile_img }}"
-          alt="{{ personal.name }}"
-          class="hero-photo"
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
-        >
-        <!-- Fallback placeholder if no image uploaded -->
-        <div class="hero-photo-placeholder" style="display:none">
-          <svg viewBox="0 0 24 24" stroke-width="1"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          <p>Add profile.jpg to<br>static/images/</p>
-        </div>
-
-        <!-- Gold corner accents -->
-        <div class="hero-photo-corner tl"></div>
-        <div class="hero-photo-corner tr"></div>
-        <div class="hero-photo-corner bl"></div>
-        <div class="hero-photo-corner br"></div>
-
-        <!-- Floating badge -->
-        <div class="hero-photo-badge">
-          ✦ &nbsp;Available for Hire
-        </div>
-      </div>
+      <figure class="hero-photo-frame">
+        <img src="{{ static_v(personal.photo) }}" alt="Portrait of {{ personal.name }}" class="hero-photo" width="720" height="960" fetchpriority="high" decoding="async">
+        <figcaption class="hero-status"><span class="status-dot" aria-hidden="true"></span>{{ personal.status }}</figcaption>
+      </figure>
     </div>
-
   </div>
-
- 
 </section>
 
-<!-- ══ SKILLS ══ -->
+<!-- About -->
+<section class="section" aria-labelledby="home-about-heading">
+  <div class="container narrow">
+    <div class="section-head">
+      <h2 id="home-about-heading" class="section-title">About me</h2>
+    </div>
+    <div class="prose">
+      {% for p in about %}
+      <p{% if loop.first %} class="lede"{% endif %}>{{ p | rich }}</p>
+      {% endfor %}
+    </div>
+    <p class="about-more"><a href="{{ url_for('about') }}" class="section-link">Read my full story, education and awards →</a></p>
+  </div>
+</section>
+
+<!-- Skills -->
 <section class="section section-alt" aria-labelledby="skills-heading">
   <div class="container">
-    <div class="section-header reveal">
-      <div class="section-tag">Tech Stack</div>
-      <h2 id="skills-heading" class="section-title">Tools I <em>Master</em></h2>
+    <div class="section-head">
+      <h2 id="skills-heading" class="section-title">Skills &amp; tools</h2>
     </div>
-
-    <!-- Technical: 6 per row (12 skills = 2 rows of 6) -->
-    <div class="skill-section" style="margin-top:2.5rem">
-      <div class="skill-grid-tech">
-        {% for skill in skills.Technical %}
-        <div class="skill-card reveal">
-          <img src="{{ skill.logo }}" alt="{{ skill.name }}" loading="lazy">
-          <span>{{ skill.name }}</span>
-        </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    <!-- Business: 4 per row (8 skills = 2 rows of 4) -->
-    <div class="skill-section" style="margin-top:1.5px">
-      <div class="skill-cat-label" style="margin-top:2rem">Business Skills</div>
-      <div class="skill-grid-biz">
-        {% for skill in skills.Business %}
-        <div class="skill-card-plain reveal">{{ skill }}</div>
-        {% endfor %}
-      </div>
-    </div>
-
-  </div>
-</section>
-
-
-
-<!-- ══ CTA ══ -->
-<section class="section" style="text-align:center;background:var(--ink)">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-tag" style="justify-content:center">Let's Connect</div>
-      <h2 class="section-title" style="font-size:clamp(2rem,5vw,4rem);margin-bottom:1rem">
-        Ready to turn data<br>into <em>impact?</em>
-      </h2>
-      <p style="max-width:440px;margin:0 auto 2.5rem;font-size:1rem">
-        Open to full-time roles, freelance analytics projects, and interesting data challenges.
-      </p>
-      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-        <a href="{{ url_for('contact') }}" class="btn-primary">Start a Conversation</a>
-        <a href="{{ personal.resume }}" class="btn-outline" target="_blank">Download Resume ↗</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ ABOUT ══ -->
-<section id="about" class="section section-alt" aria-labelledby="home-about-heading">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-tag">About</div>
-      <h2 id="home-about-heading" class="section-title">Who I Am & <em>What I Do</em></h2>
-    </div>
-    <div class="about-single reveal" style="margin-top:2rem">
-      <div class="about-text">
-        <p class="about-lede">
-          I'm a <strong>Data Analyst & Business Intelligence Specialist</strong> based in Multan, Pakistan, passionate about transforming complex, messy data into clear, actionable insights that drive real business decisions.
-        </p>
-        <p>
-          I specialize in building end-to-end analytics systems — not just dashboards, but scalable solutions that help organizations truly understand their performance and make confident decisions.
-        </p>
-        <p>
-          Currently at <strong><a href="https://www.topedgetechnologies.com/" target="_blank" rel="noopener noreferrer">Dream Edge Technologies</a></strong>, I analyze mobile app performance and monetization metrics across a portfolio of 10+ apps. Using Firebase Analytics and GA4, I track user funnels, retention cohorts, ARPU, LTV, and subscription behavior at scale.
-        </p>
-        <p>
-          Previously at <strong><a href="https://bluecascade.org/" target="_blank" rel="noopener noreferrer">Blue Cascade Pakistan</a></strong>, I designed and automated a lead generation system that delivered <strong>300+ qualified B2B leads daily</strong> with zero manual effort — significantly improving sales efficiency.
-        </p>
-        <p>
-          My technical toolkit includes <strong>SQL, Python, Power BI, Tableau, n8n, Selenium</strong>, and <strong>Machine Learning</strong>. Whether it's data modeling, automation, or predictive analytics, I focus on delivering measurable business impact.
-        </p>
-        <p>
-          Beyond professional work, I actively give back to the community as <strong>Data Science Lead at The Youth Matrix</strong> and as a <strong>Microsoft Learn Student Ambassador</strong>. I strongly believe that the real power of data lies in sharing knowledge and empowering others.
-        </p>
-        <div class="gold-line"></div>
-        <p style="font-size:0.88rem; color:var(--text3); line-height:1.7; max-width:42rem; margin:0 auto;">
-          <strong>B.Sc. Information & Communication Technology</strong><br>
-          <a href="https://bzu.edu.pk/" target="_blank" rel="noopener noreferrer">Bahauddin Zakariya University</a> • 2021–2025<br>
-          <em>Thesis: WhatsApp Chat Analyzer</em> — NLP-powered behavioral analytics tool built with Python and Streamlit.
-        </p>
-        <div style="margin-top:2rem; display:flex; gap:0.8rem; flex-wrap:wrap; justify-content:center;">
-          <a href="#contact" class="btn-primary">Get In Touch</a>
-          <a href="{{ personal.resume }}" class="btn-outline" target="_blank">Download Resume ↗</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ══ EXPERIENCE ══ -->
-<section id="experience" class="section" aria-labelledby="home-experience-heading">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-tag">Experience</div>
-      <h2 id="home-experience-heading" class="section-title">Roles That Shaped My <em>Skills</em></h2>
-    </div>
-    <div class="timeline" style="margin-top:2.5rem">
-      {% for job in experience %}
-      <div class="timeline-item reveal" style="transition-delay:0.05s">
-        <div class="timeline-dot"></div>
-        <div class="timeline-meta">
-          <span class="timeline-period">{{ job.period }}</span>
-          {% if 'Present' in job.period %}<span class="timeline-pill-active">Current</span>{% endif %}
-          <span class="timeline-type">{{ job.type }}</span>
-          <span class="timeline-type">{{ job.location }}</span>
-        </div>
-        <div class="timeline-role">{{ job.title }}</div>
-        <div class="timeline-company-line">
-          <span class="timeline-company-title">
-            {% if job.get('company_website') %}
-            <a href="{{ job.company_website }}" class="timeline-company-name-text timeline-company-name-link" target="_blank" rel="noopener noreferrer">{{ job.company }}</a>
-            {% else %}
-            <span class="timeline-company-name-text">{{ job.company }}</span>
-            {% endif %}
-          </span>
-        </div>
-        <ul class="timeline-list" style="margin-top:1rem">
-          {% for r in job.responsibilities[:3] %}
-          <li>{{ r }}</li>
-          {% endfor %}
+    <div class="skill-groups">
+      {% for group in skill_groups %}
+      <div class="skill-group">
+        <h3>{{ group.name }}</h3>
+        <ul class="chips">
+          {% for item in group['items'] %}<li>{{ item }}</li>{% endfor %}
         </ul>
       </div>
       {% endfor %}
@@ -215,188 +74,92 @@
   </div>
 </section>
 
-<!-- ══ PROJECTS ══ -->
-<section id="projects" class="section section-alt" aria-labelledby="home-projects-heading">
+<!-- Experience -->
+<section class="section" aria-labelledby="home-experience-heading">
   <div class="container">
-    <div class="section-header reveal">
-      <div class="section-tag">Projects</div>
-      <h2 id="home-projects-heading" class="section-title">Featured Work & <em>Case Studies</em></h2>
+    <div class="section-head">
+      <h2 id="home-experience-heading" class="section-title">Experience</h2>
+      <a href="{{ url_for('experience') }}" class="section-link">Full work history →</a>
     </div>
-    <div class="projects-grid" style="margin-top:2.5rem">
+    <ol class="timeline">
+      {% for job in experience[:3] %}
+      <li class="timeline-item">
+        {% include "_job_header.html" %}
+        <ul class="bullets">
+          {% for r in job.responsibilities[:2] %}<li>{{ r }}</li>{% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+
+<!-- Projects -->
+<section class="section section-alt" aria-labelledby="home-projects-heading">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="home-projects-heading" class="section-title">Selected projects</h2>
+      <a href="{{ url_for('projects') }}" class="section-link">All projects →</a>
+    </div>
+    <div class="projects-grid">
       {% for project in projects %}
-      <article class="project-card reveal" style="--card-color: {{ project.color | e }};">
-        <div class="project-card-accent"></div>
-        <div class="project-tool-badge">{{ project.tool }}</div>
-        <div class="project-number">0{{ loop.index }} / {{ project.category }}</div>
-        <h3 class="project-title">{{ project.title }}</h3>
-        <div class="project-subtitle">{{ project.subtitle }}</div>
-        <p class="project-desc">{{ project.description }}</p>
-        <div class="project-impact">{{ project.impact }}</div>
-        <div class="project-tech">
-          {% for tech in project.technologies %}
-          <span class="tech-tag">{{ tech }}</span>
-          {% endfor %}
-        </div>
-        <div class="project-links">
-          {% if project.demo %}
-          <a href="{{ project.demo }}" class="project-link" target="_blank" aria-label="View live demo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-              <polyline points="15 3 21 3 21 9"/>
-              <line x1="10" y1="14" x2="21" y2="3"/>
-            </svg>
-          </a>
-          {% endif %}
-        </div>
-      </article>
+        {% include "_project_card.html" %}
       {% endfor %}
-    </div>
-    <div style="margin-top:2rem; text-align:center;">
-      <a href="{{ url_for('projects') }}" class="btn-outline">View All Projects</a>
     </div>
   </div>
 </section>
 
-<!-- ══ CERTIFICATIONS ══ -->
-<section id="certifications" class="section" aria-labelledby="home-certs-heading">
+<!-- Certifications -->
+<section class="section" aria-labelledby="home-certs-heading">
   <div class="container">
-    <div class="section-header reveal">
-      <div class="section-tag">Credentials</div>
-      <h2 id="home-certs-heading" class="section-title">Certifications & <em>Achievements</em></h2>
+    <div class="section-head">
+      <h2 id="home-certs-heading" class="section-title">Certifications</h2>
+      <a href="{{ url_for('certifications') }}" class="section-link">Details &amp; verification →</a>
     </div>
-    <div class="certs-grid" style="margin-top:2.5rem">
+    <ul class="cert-list">
       {% for cert in certifications %}
-      <div class="cert-card reveal">
-        <div class="cert-badge">
-          <img src="{{ cert.issuer_logo }}" alt="{{ cert.issuer }}" loading="lazy">
+      <li>
+        <div>
+          <p class="cert-name">{{ cert.name }}</p>
+          <p class="cert-meta">{{ cert.issuer }} · {{ cert.date }}</p>
         </div>
-        <div class="cert-info">
-          <div class="cert-name">{{ cert.name }}</div>
-          <div class="cert-issuer">{{ cert.issuer }}</div>
-          <p class="cert-desc">{{ cert.description }}</p>
-          <div class="cert-skills">
-            {% for skill in cert.skills %}
-            <span class="cert-skill">{{ skill }}</span>
-            {% endfor %}
-          </div>
-          <div class="cert-footer">
-            <div>
-              <div class="cert-date">{{ cert.date }}</div>
-              <div class="cert-id">ID: {{ cert.credential_id }}</div>
-            </div>
-            <a href="{{ cert.verify_url }}" class="cert-verify" target="_blank">Verify ↗</a>
-          </div>
-        </div>
-      </div>
+        <a href="{{ cert.verify_url }}" class="cert-verify" target="_blank" rel="noopener noreferrer">Verify<span class="sr-only"> {{ cert.name }} ({{ cert.issuer }}), opens in a new tab</span> ↗</a>
+      </li>
       {% endfor %}
-    </div>
-    <div style="margin-top:2rem; text-align:center;">
-      <a href="{{ url_for('certifications') }}" class="btn-outline">See More Credentials</a>
-    </div>
+    </ul>
   </div>
 </section>
 
-<!-- ══ VOLUNTEER ══ -->
-<section id="volunteer" class="section section-alt" aria-labelledby="home-volunteer-heading">
+<!-- Community -->
+<section class="section section-alt" aria-labelledby="home-community-heading">
   <div class="container">
-    <div class="section-header reveal">
-      <div class="section-tag">Volunteer</div>
-      <h2 id="home-volunteer-heading" class="section-title">Community Impact & <em>Leadership</em></h2>
+    <div class="section-head">
+      <h2 id="home-community-heading" class="section-title">Community &amp; leadership</h2>
+      <a href="{{ url_for('volunteer') }}" class="section-link">More about my community work →</a>
     </div>
-    <div class="volunteer-blocks" style="margin-top:2.5rem">
+    <div class="community-grid">
       {% for vol in volunteer %}
-      <article class="vol-block reveal">
-        <header class="vol-block-header">
-          <div class="vol-block-brand">
-            <img class="vol-block-logo" src="{{ url_for('static', filename=vol.logo) }}" alt="{{ vol.org }} logo" width="64" height="64" loading="lazy" decoding="async">
-            <div class="vol-block-title-wrap">
-              <p class="vol-block-org">{{ vol.org }}</p>
-              <h2 class="vol-block-role">{{ vol.role }}</h2>
-              <p class="vol-block-period">{{ vol.period }}</p>
-            </div>
-          </div>
-        </header>
-        <div class="vol-block-body">
-          <p class="vol-desc">{{ vol.description }}</p>
-          <ul class="vol-list">
-            {% for a in vol.achievements[:3] %}
-            <li>{{ a }}</li>
-            {% endfor %}
-          </ul>
+      <article class="community-card">
+        <img src="{{ static_v(vol.logo) }}" alt="" width="56" height="56" loading="lazy" decoding="async" class="org-logo">
+        <div>
+          <h3>{{ vol.role }}</h3>
+          <p class="meta">{{ vol.org }} · {{ vol.period }}</p>
+          <p>{{ vol.description }}</p>
         </div>
       </article>
       {% endfor %}
     </div>
-    <div style="margin-top:2rem; text-align:center;">
-      <a href="{{ url_for('volunteer') }}" class="btn-outline">Explore Volunteer Roles</a>
-    </div>
   </div>
 </section>
 
-<!-- ══ CONTACT ══ -->
-<section id="contact" class="section" aria-labelledby="home-contact-heading">
-  <div class="container">
-    <div class="section-header reveal">
-      <div class="section-tag">Contact</div>
-      <h2 id="home-contact-heading" class="section-title">Start a Conversation</h2>
-    </div>
-    <div class="contact-grid" style="margin-top:2.5rem">
-      <div class="reveal">
-        <div class="section-tag" id="contact-details-heading" style="margin-bottom:1rem">Contact Details</div>
-        <p class="contact-sidebar-note">Email me securely via the form — I’ll respond on the address you provide.</p>
-        <div class="contact-info-item">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.06 6.06l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          </div>
-          <div>
-            <div class="contact-info-label">Phone / WhatsApp</div>
-            <div class="contact-info-value"><a href="tel:{{ personal.phone }}">{{ personal.phone }}</a></div>
-          </div>
-        </div>
-        <div class="contact-info-item">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          </div>
-          <div>
-            <div class="contact-info-label">LinkedIn</div>
-            <div class="contact-info-value"><a href="{{ personal.linkedin }}" target="_blank" rel="noopener noreferrer">linkedin.com/in/asadmujeeb</a></div>
-          </div>
-        </div>
-        <div class="contact-info-item">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
-          <div>
-            <div class="contact-info-label">Location</div>
-            <div class="contact-info-value">{{ personal.location }}</div>
-          </div>
-        </div>
-      </div>
-      <div class="reveal" style="transition-delay:0.12s">
-        <form method="POST" action="{{ url_for('contact') }}" aria-label="Send a message">
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="name">Name *</label>
-              <input class="form-input" type="text" id="name" name="name" placeholder="Your name" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="email">Email *</label>
-              <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" required>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="subject">Subject</label>
-            <input class="form-input" type="text" id="subject" name="subject" placeholder="What's this about?">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="message">Message *</label>
-            <textarea class="form-textarea" id="message" name="message" placeholder="Tell me about your project or opportunity…" required></textarea>
-          </div>
-          <button type="submit" class="btn-primary" style="width:100%;justify-content:center">
-            Send Message →
-          </button>
-        </form>
-      </div>
+<!-- Contact CTA -->
+<section class="section cta" aria-labelledby="home-contact-heading">
+  <div class="container narrow cta-inner">
+    <h2 id="home-contact-heading" class="section-title">Have a data problem worth solving?</h2>
+    <p>Open to full-time roles, freelance analytics projects, and interesting data challenges.</p>
+    <div class="hero-actions center">
+      <a href="{{ url_for('contact') }}" class="btn btn-primary">Send a message</a>
+      <a href="mailto:{{ personal.email }}" class="btn btn-outline">{{ personal.email }}</a>
     </div>
   </div>
 </section>

@@ -1,121 +1,65 @@
 {% extends "base.html" %}
-{% block title %}About — {{ personal.name }}{% endblock %}
 
 {% block content %}
-<section class="page-hero" aria-labelledby="about-hero-heading">
+<section class="page-hero" aria-labelledby="page-title">
   <div class="container">
-    <span class="page-hero-tag reveal">About Me</span>
-    <h1 id="about-hero-heading" class="page-hero-title reveal" style="transition-delay:0.1s">
-      Data-Driven<br><em>By Design</em>
-    </h1>
-    <p class="page-hero-sub reveal" style="transition-delay:0.2s">
-      From raw datasets to boardroom insights — I build the systems that connect data to decisions.
-    </p>
+    <h1 id="page-title" class="page-title">About me</h1>
+    <p class="page-sub">From raw datasets to boardroom insights — I build the systems that connect data to decisions.</p>
   </div>
 </section>
 
-<!-- Bio -->
-<section class="section" aria-labelledby="about-story-heading">
-  <div class="container">
-    <div class="about-single">
-      <div class="about-text reveal">
-        <h2 id="about-story-heading" class="sr-only">My story</h2>
-        
-        <p class="about-lede">
-          I'm a <strong>Data Analyst & Business Intelligence Specialist</strong> based in Multan, Pakistan, passionate about transforming complex, messy data into clear, actionable insights that drive real business decisions.
-        </p>
+<section class="section" aria-labelledby="story-heading">
+  <div class="container narrow">
+    <h2 id="story-heading" class="sr-only">My story</h2>
+    <div class="prose">
+      {% for p in about %}
+      <p{% if loop.first %} class="lede"{% endif %}>{{ p | rich }}</p>
+      {% endfor %}
+    </div>
+    <div class="hero-actions">
+      <a href="{{ url_for('contact') }}" class="btn btn-primary">Get in touch</a>
+      <a href="{{ personal.resume }}" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Download resume<span class="sr-only"> (PDF, opens in a new tab)</span></a>
+    </div>
+  </div>
+</section>
 
-        <p>
-          I specialize in building end-to-end analytics systems — not just dashboards, but scalable solutions that help organizations truly understand their performance and make confident decisions.
-        </p>
-
-        <p>
-          Currently at <strong><a href="https://www.topedgetechnologies.com/" target="_blank" rel="noopener noreferrer">Dream Edge Technologies</a></strong>, I analyze mobile app performance and monetization metrics across a portfolio of 10+ apps. Using Firebase Analytics and GA4, I track user funnels, retention cohorts, ARPU, LTV, and subscription behavior at scale.
-        </p>
-
-        <p>
-          Previously at <strong><a href="https://bluecascade.org/" target="_blank" rel="noopener noreferrer">Blue Cascade Pakistan</a></strong>, I designed and automated a lead generation system that delivered <strong>300+ qualified B2B leads daily</strong> with zero manual effort — significantly improving sales efficiency.
-        </p>
-
-        <p>
-          My technical toolkit includes <strong>SQL, Python, Power BI, Tableau, n8n, Selenium</strong>, and <strong>Machine Learning</strong>. Whether it's data modeling, automation, or predictive analytics, I focus on delivering measurable business impact.
-        </p>
-
-        <p>
-          Beyond professional work, I actively give back to the community as <strong>Data Science Lead at The Youth Matrix</strong> and as a <strong>Microsoft Learn Student Ambassador</strong>. I strongly believe that the real power of data lies in sharing knowledge and empowering others.
-        </p>
-
-        <div class="gold-line"></div>
-
-        <p style="font-size:0.88rem; color:var(--text3); line-height:1.7">
-          <strong>BSc. Information & Communication Technology</strong><br>
-          <a href="https://bzu.edu.pk/" target="_blank" rel="noopener noreferrer">Bahauddin Zakariya University</a> • 2021–2025<br>
-        </p>
-
-        <div style="margin-top:2rem; display:flex; gap:0.8rem; flex-wrap:wrap">
-          <a href="{{ url_for('contact') }}" class="btn-primary">Get In Touch</a>
-          <a href="{{ personal.resume }}" class="btn-outline" target="_blank">Download Resume ↗</a>
-        </div>
+<section class="section section-alt" aria-labelledby="edu-heading">
+  <div class="container narrow">
+    <div class="section-head"><h2 id="edu-heading" class="section-title">Education</h2></div>
+    {% for edu in education %}
+    <article class="edu">
+      <h3>{{ edu.degree }}</h3>
+      <p class="meta"><a href="{{ edu.institution_url }}" target="_blank" rel="noopener noreferrer">{{ edu.institution }}</a> · {{ edu.location }}</p>
+      <p class="meta">{{ edu.period }} · GPA {{ edu.gpa }}</p>
+      <div class="edu-thesis">
+        <h4>Thesis: {{ edu.thesis }}</h4>
+        <p>{{ edu.thesis_summary }}</p>
       </div>
-    </div>
+    </article>
+    {% endfor %}
   </div>
 </section>
 
-<!-- Shields & trophies -->
-<section class="section section-alt section-badges-trophies" aria-labelledby="badges-heading">
+<section class="section" aria-labelledby="strengths-heading">
   <div class="container">
-    <div class="reveal">
-      <div class="section-tag">Recognition</div>
-      <h2 id="badges-heading" class="section-title">Shields &amp;<br><em>Trophies</em></h2>
-    </div>
-    <div class="badges-grid badges-grid--showcase reveal" style="transition-delay:0.08s">
-      {% for badge in about_badges %}
-      {% set badge_src = badge.image if badge.image.startswith('http') else url_for('static', filename=badge.image) %}
-      <figure class="badge-tile">
-        {% if badge.href %}
-        <a href="{{ badge.href }}" class="badge-tile-link" target="_blank" rel="noopener noreferrer">
-          <div class="badge-tile-frame">
-            <img src="{{ badge_src }}" alt="{{ badge.alt }}" loading="lazy" decoding="async" width="160" height="80">
-          </div>
-        </a>
-        {% else %}
-        <div class="badge-tile-frame">
-          <img src="{{ badge_src }}" alt="{{ badge.alt }}" loading="lazy" decoding="async" width="160" height="80">
-        </div>
-        {% endif %}
-        {% if badge.caption %}
-        <figcaption class="badge-tile-caption">{{ badge.caption }}</figcaption>
-        {% endif %}
+    <div class="section-head"><h2 id="strengths-heading" class="section-title">How I work</h2></div>
+    <ul class="strengths">
+      {% for s in business_skills %}<li>{{ s }}</li>{% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section section-alt" aria-labelledby="awards-heading">
+  <div class="container">
+    <div class="section-head"><h2 id="awards-heading" class="section-title">Awards &amp; recognition</h2></div>
+    <div class="awards">
+      {% for award in awards %}
+      <figure class="award">
+        <img src="{{ static_v(award.image) }}" alt="{{ award.alt }}" width="{{ award.width }}" height="{{ award.height }}" loading="lazy" decoding="async">
+        <figcaption><strong>{{ award.title }}</strong><br>{{ award.org }}</figcaption>
       </figure>
       {% endfor %}
     </div>
-  </div>
-</section>
-
-<!-- Education -->
-<section class="section section-education-after-badges" aria-labelledby="education-heading">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-tag">Academic Background</div>
-      <h2 id="education-heading" class="section-title">Education &<br><em>Formation</em></h2>
-    </div>
-
-    {% for edu in education %}
-    <div class="edu-card reveal" style="transition-delay:0.1s">
-      <div>
-        <div class="edu-degree">{{ edu.degree }}</div>
-        <div class="edu-inst">{{ edu.institution }}</div>
-        <div class="edu-period">{{ edu.period }} · {{ edu.location }}</div>
-        
-        <div class="edu-thesis">
-          <strong>Thesis Project</strong><br>
-          {{ edu.thesis }} — A Python + NLP Streamlit application that analyzes exported WhatsApp chats to uncover sentiment trends, activity patterns, top contributors, and message volume forecasts.
-        </div>
-      </div>
-      
-     
-    </div>
-    {% endfor %}
   </div>
 </section>
 {% endblock %}

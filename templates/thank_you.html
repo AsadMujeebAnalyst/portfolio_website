@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block robots %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block content %}
+<section class="section status-page" aria-labelledby="page-title">
+  <div class="container narrow">
+    <h1 id="page-title" class="page-title">Message sent</h1>
+    <p class="page-sub">Thanks for reaching out. I'll reply to the email address you provided.</p>
+    <div class="hero-actions">
+      <a href="{{ url_for('index') }}" class="btn btn-primary">Back to home</a>
+      <a href="{{ url_for('projects') }}" class="btn btn-outline">View projects</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

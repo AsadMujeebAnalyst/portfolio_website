@@ -1,0 +1,22 @@
+{# Expects `job` in context. Used by the home and experience pages. #}
+<div class="job-head">
+  {% if job.logo %}
+  <span class="logo-tile"><img src="{{ static_v(job.logo) }}" alt="" width="48" height="48" loading="lazy" decoding="async"></span>
+  {% else %}
+  <span class="logo-tile logo-tile-empty" aria-hidden="true">{{ job.company[:1] }}</span>
+  {% endif %}
+  <div class="job-head-text">
+    <h3 class="job-title">{{ job.title }}</h3>
+    <p class="job-company">
+      {% if job.company_website %}
+      <a href="{{ job.company_website }}" target="_blank" rel="noopener noreferrer">{{ job.company }}<span class="sr-only"> (opens in a new tab)</span></a>
+      {% else %}{{ job.company }}{% endif %}
+      {% if job.linkedin_url %}<a class="job-linkedin" href="{{ job.linkedin_url }}" target="_blank" rel="noopener noreferrer" aria-label="{{ job.company }} on LinkedIn (opens in a new tab)">LinkedIn</a>{% endif %}
+    </p>
+    <p class="job-meta">
+      <time>{{ job.period }}</time>
+      {% if job.current %}<span class="pill">Current</span>{% endif %}
+      <span>{{ job.type }} · {{ job.location }}</span>
+    </p>
+  </div>
+</div>
