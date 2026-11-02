@@ -1,93 +1,54 @@
 {% extends "base.html" %}
-{% block title %}Contact — {{ personal.name }}{% endblock %}
 
 {% block content %}
-
-<section class="page-hero" aria-labelledby="contact-hero-heading">
+<section class="page-hero" aria-labelledby="page-title">
   <div class="container">
-    <span class="page-hero-tag reveal">Get In Touch</span>
-    <h1 id="contact-hero-heading" class="page-hero-title reveal" style="transition-delay:0.1s">
-      Let's Work<br><em>Together</em>
-    </h1>
-    <p class="page-hero-sub reveal" style="transition-delay:0.2s">
-      Open to full-time roles, freelance analytics projects, and interesting data challenges.
-    </p>
+    <h1 id="page-title" class="page-title">Let's work together</h1>
+    <p class="page-sub">Open to full-time roles, freelance analytics projects, and interesting data challenges. I usually reply within a couple of days.</p>
   </div>
 </section>
 
-<section class="section" aria-labelledby="contact-details-heading">
-  <div class="container">
-    <div class="contact-grid">
+<section class="section">
+  <div class="container contact-grid">
+    <div>
+      <h2 class="contact-heading">Contact details</h2>
+      <dl class="contact-list">
+        <div><dt>Email</dt><dd><a href="mailto:{{ personal.email }}">{{ personal.email }}</a></dd></div>
+        <div><dt>Phone / WhatsApp</dt><dd><a href="tel:{{ personal.phone | replace(' ', '') }}">{{ personal.phone }}</a></dd></div>
+        <div><dt>LinkedIn</dt><dd><a href="{{ personal.linkedin }}" target="_blank" rel="noopener noreferrer">{{ personal.linkedin_label }}<span class="sr-only"> (opens in a new tab)</span></a></dd></div>
+        <div><dt>GitHub</dt><dd><a href="{{ personal.github }}" target="_blank" rel="noopener noreferrer">{{ personal.github_label }}<span class="sr-only"> (opens in a new tab)</span></a></dd></div>
+        <div><dt>Location</dt><dd>{{ personal.location }}</dd></div>
+      </dl>
+    </div>
 
-      <!-- Left: contact info -->
-      <div class="reveal">
-        <div id="contact-details-heading" class="section-tag" style="margin-bottom:1rem">Contact Details</div>
-        <p class="contact-sidebar-note">Email me securely via the form — I’ll respond on the address you provide.</p>
+    <div>
+      <h2 class="contact-heading">Send a message</h2>
+      {# Handled by Netlify Forms on deploy — see README. #}
+      <form name="contact" method="POST" action="{{ url_for('thank_you') }}/" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="contact">
+        <p class="hp" aria-hidden="true"><label>Leave this field empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
 
-        <div class="contact-info-item">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.39 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6.06 6.06l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-          </div>
-          <div>
-            <div class="contact-info-label">Phone / WhatsApp</div>
-            <div class="contact-info-value">
-              <a href="tel:{{ personal.phone }}">{{ personal.phone }}</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-info-item">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          </div>
-          <div>
-            <div class="contact-info-label">LinkedIn</div>
-            <div class="contact-info-value">
-              <a href="{{ personal.linkedin }}" target="_blank" rel="noopener noreferrer">linkedin.com/in/asadmujeeb</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-info-item">
-          <div class="contact-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
-          <div>
-            <div class="contact-info-label">Location</div>
-            <div class="contact-info-value">{{ personal.location }}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: form -->
-      <div class="reveal" style="transition-delay:0.12s">
-        <form method="POST" action="{{ url_for('contact') }}" aria-label="Send a message">
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="name">Name *</label>
-              <input class="form-input" type="text" id="name" name="name" placeholder="Your name" required>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="email">Email *</label>
-              <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com" required>
-            </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="name">Name <span aria-hidden="true">*</span></label>
+            <input class="form-input" type="text" id="name" name="name" autocomplete="name" required>
           </div>
           <div class="form-group">
-            <label class="form-label" for="subject">Subject</label>
-            <input class="form-input" type="text" id="subject" name="subject" placeholder="What's this about?">
+            <label class="form-label" for="email">Email <span aria-hidden="true">*</span></label>
+            <input class="form-input" type="email" id="email" name="email" autocomplete="email" required>
           </div>
-          <div class="form-group">
-            <label class="form-label" for="message">Message *</label>
-            <textarea class="form-textarea" id="message" name="message" placeholder="Tell me about your project or opportunity…" required></textarea>
-          </div>
-          <button type="submit" class="btn-primary" style="width:100%;justify-content:center">
-            Send Message →
-          </button>
-        </form>
-      </div>
-
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="subject">Subject</label>
+          <input class="form-input" type="text" id="subject" name="subject">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message">Message <span aria-hidden="true">*</span></label>
+          <textarea class="form-input form-textarea" id="message" name="message" placeholder="Tell me about the role or project." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Send message</button>
+      </form>
     </div>
   </div>
 </section>
-
 {% endblock %}

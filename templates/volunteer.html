@@ -1,56 +1,37 @@
 {% extends "base.html" %}
-{% block title %}Volunteer — {{ personal.name }}{% endblock %}
 
 {% block content %}
-
-<section class="page-hero" aria-labelledby="volunteer-hero-heading">
+<section class="page-hero" aria-labelledby="page-title">
   <div class="container">
-    <span class="page-hero-tag reveal">Leadership</span>
-    <h1 id="volunteer-hero-heading" class="page-hero-title reveal" style="transition-delay:0.1s">
-      Volunteer &amp;<br><em>Community</em>
-    </h1>
-    <p class="page-hero-sub reveal" style="transition-delay:0.2s">
-      Giving back through student programs and fellowships — workshops, mentorship, and hands-on analytics for the next generation.
-    </p>
+    <h1 id="page-title" class="page-title">Community &amp; leadership</h1>
+    <p class="page-sub">Giving back through student programs and fellowships — workshops, mentorship, and hands-on analytics for the next generation.</p>
   </div>
 </section>
 
-<section class="section section-alt volunteer-section-wide">
+<section class="section">
   <div class="container">
-    <nav class="volunteer-subnav reveal" aria-label="Jump to organization" style="transition-delay:0.06s">
-      {% for vol in volunteer %}
-      <a href="#vol-{{ vol.slug }}" class="volunteer-subnav-link">{{ vol.org }}</a>
-      {% endfor %}
-    </nav>
     <div class="volunteer-blocks">
       {% for vol in volunteer %}
-      <article id="vol-{{ vol.slug }}" class="vol-block reveal">
-        <header class="vol-block-header">
-          <div class="vol-block-brand">
-            <img class="vol-block-logo" src="{{ url_for('static', filename=vol.logo) }}" alt="" width="64" height="64" loading="lazy" decoding="async">
-            <div class="vol-block-title-wrap">
-              <p class="vol-block-org">{{ vol.org }}</p>
-              <h2 class="vol-block-role">{{ vol.role }}</h2>
-              <p class="vol-block-period">{{ vol.period }}</p>
-            </div>
+      <article id="vol-{{ vol.slug }}" class="vol-block" aria-labelledby="vol-{{ vol.slug }}-title">
+        <div class="vol-head">
+          <img class="org-logo" src="{{ static_v(vol.logo) }}" alt="" width="56" height="56" loading="lazy" decoding="async">
+          <div>
+            <h2 class="vol-title" id="vol-{{ vol.slug }}-title">{{ vol.role }}</h2>
+            <p class="meta">{{ vol.org }} · {{ vol.period }}</p>
           </div>
-        </header>
-        <div class="vol-block-body">
-          <p class="vol-desc">{{ vol.description }}</p>
-          <ul class="vol-list">
-            {% for a in vol.achievements %}
-            <li>{{ a }}</li>
-            {% endfor %}
-          </ul>
         </div>
-        <div class="vol-gallery" role="group" aria-label="Photos from {{ vol.org }}">
-          <figure class="vol-gallery-item">
-            <img src="{{ url_for('static', filename=vol.announcement) }}" alt="Announcement or highlight — {{ vol.org }}" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 45vw">
-            <figcaption class="vol-gallery-caption">Announcement</figcaption>
+        <p class="vol-desc">{{ vol.description }}</p>
+        <ul class="bullets">
+          {% for a in vol.achievements %}<li>{{ a }}</li>{% endfor %}
+        </ul>
+        <div class="vol-gallery">
+          <figure>
+            <img src="{{ static_v(vol.announcement) }}" alt="Program announcement — {{ vol.org }}" width="{{ vol.announcement_size[0] }}" height="{{ vol.announcement_size[1] }}" loading="lazy" decoding="async">
+            <figcaption>Announcement</figcaption>
           </figure>
-          <figure class="vol-gallery-item">
-            <img src="{{ url_for('static', filename=vol.group_photo) }}" alt="Group photo — {{ vol.org }}" loading="lazy" decoding="async" sizes="(max-width: 900px) 100vw, 45vw">
-            <figcaption class="vol-gallery-caption">Group</figcaption>
+          <figure>
+            <img src="{{ static_v(vol.group_photo) }}" alt="Group photo — {{ vol.org }}" width="{{ vol.group_size[0] }}" height="{{ vol.group_size[1] }}" loading="lazy" decoding="async">
+            <figcaption>Group photo</figcaption>
           </figure>
         </div>
       </article>
@@ -58,5 +39,4 @@
     </div>
   </div>
 </section>
-
 {% endblock %}
